@@ -10,24 +10,36 @@
 #include <Servo.h>
 
 Servo myservo;  // create servo object to control a servo
+int MAX_VAL;
 
-int potpin = A0;  // analog pin used to connect the potentiometer
+//int potpin = A0;  // analog pin used to connect the potentiometer
 int val;    // variable to read the value from the analog pin
-int increment = 5;
+int increment;
+bool up = true;
 
 void setup() {
+  MAX_VAL = 511;
   val = 0;
+  increment = 1;
   myservo.attach(9);  // attaches the servo on pin 9 to the servo object
 }
 
 void loop() {
-//  val = val + increment;
-//  if (val > 1023)
-//    increment *= -1;
-//  if (val < 0)
-//    increment *= -1;
-//  //val = analogRead(potpin);            // reads the value of the potentiometer (value between 0 and 1023)
-//  //val = map(val, 0, 1023, 0, 180);     // scale it for use with the servo (value between 0 and 180)
+  val = val + increment;
+  if (val >= MAX_VAL && up)
+  {
+    up = false;
+    increment = increment * -1;
+    delay(1000);
+  } 
+  if (val <= 0 && !up)
+  {
+    up = true;
+    increment = increment * -1;
+    delay(1000);
+  }
+  //val = analogRead(potpin);            // reads the value of the potentiometer (value between 0 and 1023)
+  //val = map(val, 0, 1023, 0, 180);     // scale it for use with the servo (value between 0 and 180)
   myservo.write(val);                  // sets the servo position according to the scaled value
-//  delay(15);                           // waits for the servo to get there
+  //delay(10);                           // waits for the servo to get there
 }
